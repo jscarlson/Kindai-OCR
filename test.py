@@ -196,8 +196,7 @@ def test(text_detection_modelpara, ocr_modelpara, dictionary_target):
     else:
         OCR.load_state_dict(copyStateDict(torch.load(ocr_modelpara, map_location='cpu')))
     if args.cuda:
-        OCR = OCR.cuda()
-        OCR = torch.nn.DataParallel(OCR)
+        OCR = torch.nn.DataParallel(OCR).cuda()
         cudnn.benchmark = False
 
 
