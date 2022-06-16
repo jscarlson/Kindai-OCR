@@ -84,7 +84,7 @@ class Encoder_Decoder(nn.Module):
 
     # decoding: decoder part
     def f_next(self, params, y, y_mask, ctx, ctx_mask, init_state, alpha_past, one_step):
-        emb_beam = self.emb_model(params, y)
+        emb_beam = self.emb_model(params, y).cuda()
 
         # one step of two gru layers
         next_state, cts, _alpha, next_alpha_past = self.gru_model(params, emb_beam, y_mask, ctx, ctx_mask,
