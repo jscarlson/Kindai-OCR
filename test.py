@@ -161,10 +161,13 @@ def test_net(net, image, text_threshold, link_threshold, low_text, cuda, poly):
 
 
 def test(text_detection_modelpara, ocr_modelpara, dictionary_target):
+    
+    """
     # load net
     net = CRAFT()     # initialize
 
     print('Loading text detection model from checkpoint {}'.format(text_detection_modelpara))
+
     if args.cuda:
         net.load_state_dict(copyStateDict(torch.load(text_detection_modelpara)))
     else:
@@ -174,7 +177,7 @@ def test(text_detection_modelpara, ocr_modelpara, dictionary_target):
         net = net.cuda()
         net = torch.nn.DataParallel(net)
         cudnn.benchmark = False
-
+    """
 
     params = {}
     params['n'] = 256
@@ -201,7 +204,7 @@ def test(text_detection_modelpara, ocr_modelpara, dictionary_target):
 
 
     OCR.eval()
-    net.eval()
+    # net.eval()
 
     # load dictionary
     worddicts = load_dict(dictionary_target)
@@ -248,7 +251,7 @@ def test(text_detection_modelpara, ocr_modelpara, dictionary_target):
         page.set('dpi', str(100))
         page.set('number', str(1))
 
-        bboxes, polys, score_text = test_net(net, image, args.text_threshold, args.link_threshold, args.low_text, args.cuda, args.poly)
+        # bboxes, polys, score_text = test_net(None, image, args.text_threshold, args.link_threshold, args.low_text, args.cuda, args.poly)
         text = []
         localtions = []
         for i, box in enumerate(bboxes):
@@ -311,17 +314,9 @@ def test(text_detection_modelpara, ocr_modelpara, dictionary_target):
                 
 
                 result += chr(int(worddicts_r[vv],16))
-                '''char = ET.SubElement(line, "char") 
-                char.set('num_cand', '1') 
-                char.set('x', str(int(16* x/rate) -  8 + min_x)) 
-                char.set('y', str(int(16* y/rate) + 8 + min_y)) 
-                res = ET.SubElement(char, "result") 
-                res.set('CC', str(100))
-                res.text = chr(int(worddicts_r[vv],16))
-                cand = ET.SubElement(char, "cand") 
-                cand.set('CC', str(100))
-                cand.text = chr(int(worddicts_r[vv],16))'''
+
                 i+=1 
+            
             line.text = result
             text.append(result)
             localtions.append(location)
