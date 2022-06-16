@@ -117,7 +117,7 @@ if __name__ == '__main__':
 
     OCR_MODELPARA = "./pretrain/WAP_params.pkl"
     DICTIONARY_TARGET = "./pretrain/kindai_voc.txt"
-    TEST_IMAGES = "/srv/ocr/github_repos/EasyOCR/trainer/easyocr_data/tk_test"
+    TEST_IMAGES = "/srv/ocr/github_repos/EasyOCR/trainer/easyocr_data/ww_test"
 
     label_df = pd.read_csv(os.path.join(TEST_IMAGES, "labels.csv"))
     label_dict = {fn:lab for fn, lab in zip(label_df["filename"].tolist(), label_df["words"].tolist())}
