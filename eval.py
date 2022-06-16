@@ -9,6 +9,54 @@ from collections import OrderedDict
 from glob import glob
 import os
 from tqdm import tqdm
+from nltk.metrics.distance import edit_distance
+import pandas as pd
+
+
+def textline_evaluation(
+        pairs,
+        print_incorrect=False, 
+        no_spaces_in_eval=True, 
+        norm_edit_distance=False, 
+        uncased=False
+    ):
+
+    n_correct = 0
+    edit_count = 0
+    length_of_data = len(pairs)
+    n_chars = sum(len(gt) for gt, _ in pairs)
+
+    for gt, pred in pairs:
+
+        # eval w/o spaces
+        gt = gt.strip() if not no_spaces_in_eval else gt.strip().replace(" ", "")
+        pred = pred.strip() if not no_spaces_in_eval else pred.strip().replace(" ", "")
+        if uncased:
+            pred, gt = pred.lower(), gt.lower()
+        
+        # textline accuracy
+        if pred == gt:
+            n_correct += 1
+        else:
+            if print_incorrect:
+                print(f"GT: {gt}\nPR: {pred}\n")
+
+        # ICDAR2019 Normalized Edit Distance
+        if norm_edit_distance:
+            if len(gt) > len(pred):
+                edit_count += edit_distance(pred, gt) / len(gt)
+            else:
+                edit_count += edit_distance(pred, gt) / len(pred)
+        else:
+            edit_count += edit_distance(pred, gt)
+
+    accuracy = n_correct / float(length_of_data) * 100
+    if norm_edit_distance:
+        cer = edit_count / float(length_of_data)
+    else:
+        cer = edit_count / n_chars
+
+    return accuracy, cer
 
 
 def copyStateDict(state_dict):
@@ -71,6 +119,10 @@ if __name__ == '__main__':
     DICTIONARY_TARGET = "./pretrain/kindai_voc.txt"
     TEST_IMAGES = "/srv/ocr/github_repos/EasyOCR/trainer/easyocr_data/tk_test"
 
+    label_df = pd.read_csv(os.path.join(TEST_IMAGES, "labels.csv"))
+    print(label_df.head())
+    exit(1)
+
     params = {}
     params['n'] = 256
     params['m'] = 256
@@ -98,7 +150,12 @@ if __name__ == '__main__':
         worddicts_r[vv] = kk
 
     # run OCR
+    pairs = []
     for image_path in glob(os.path.join(TEST_IMAGES, "*.png")):
         print(image_path)
         result = Kindai_OCR(image_path)
         print(result)
+
+    accuracy, cer = textline_evaluation(pairs)
+
+    print(accuracy, cer)
