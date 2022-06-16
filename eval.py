@@ -98,7 +98,7 @@ if __name__ == '__main__':
         worddicts_r[vv] = kk
 
     # run OCR
-    for image_path in glob(os.path.join(TEST_IMAGES, "*")):
+    for image_path in glob(os.path.join(TEST_IMAGES, "*.png")):
         print(image_path)
         result = Kindai_OCR(image_path)
         print(result)
