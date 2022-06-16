@@ -120,8 +120,7 @@ if __name__ == '__main__':
     TEST_IMAGES = "/srv/ocr/github_repos/EasyOCR/trainer/easyocr_data/tk_test"
 
     label_df = pd.read_csv(os.path.join(TEST_IMAGES, "labels.csv"))
-    print(label_df.head())
-    exit(1)
+    label_dict = {fn:lab for fn, lab in zip(label_df["filename"].tolist(), label_df["words"].tolist())}
 
     params = {}
     params['n'] = 256
@@ -151,10 +150,9 @@ if __name__ == '__main__':
 
     # run OCR
     pairs = []
-    for image_path in glob(os.path.join(TEST_IMAGES, "*.png")):
-        print(image_path)
+    for image_path in tqdm(glob(os.path.join(TEST_IMAGES, "*.png"))):
         result = Kindai_OCR(image_path)
-        print(result)
+        pairs.append((label_dict[os.path.basename(image_path)], result))
 
     accuracy, cer = textline_evaluation(pairs)
 
