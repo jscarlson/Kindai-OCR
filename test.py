@@ -290,9 +290,9 @@ def test(text_detection_modelpara, ocr_modelpara, dictionary_target):
             xx_pad = mat.astype(np.float32) / 255.
             xx_pad = torch.from_numpy(xx_pad[None, :, :, :])  # (1,1,H,W)
             if args.cuda:
+                print('yep')
                 xx_pad.cuda()
             with torch.no_grad():
-                print(xx_pad)
                 sample, score, alpha_past_list = gen_sample(OCR, xx_pad, params, args.cuda, k=10, maxlen=600)
             score = score / np.array([len(s) for s in sample])
             ss = sample[score.argmin()]
