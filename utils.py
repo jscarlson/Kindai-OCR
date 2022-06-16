@@ -163,10 +163,10 @@ def gen_sample(model, x, params, gpu_flag, k=1, maxlen=30):
         ctx = np.tile(ctx0, [live_k, 1, 1, 1])
         ctx = torch.from_numpy(ctx)
         if gpu_flag:
-            ctx.cuda()
-            next_w.cuda()
-            next_state.cuda()
-            next_alpha_past.cuda()
+            ctx = ctx.cuda()
+            next_w = next_w.cuda()
+            next_state = next_state.cuda()
+            next_alpha_past = next_alpha_past.cuda()
 
             next_p, next_state, next_alpha_past, alpha = model.module.f_next(params, next_w, None, ctx, None, next_state,
                                                                       next_alpha_past, True)
