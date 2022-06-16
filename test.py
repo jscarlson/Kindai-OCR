@@ -211,7 +211,7 @@ def test(text_detection_modelpara, ocr_modelpara, dictionary_target):
         worddicts_r[vv] = kk
     t = time.time()
 
-    fontPIL = '/usr/share/fonts/truetype/fonts-japanese-gothic.ttf' # japanese font
+    fontPIL = '/usr/share/fonts/truetype/noto/NotoMono-Regular.ttf' # japanese font
     size = 40
     colorBGR = (0,0,255) 
 
