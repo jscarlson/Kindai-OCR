@@ -27,13 +27,13 @@ class My_Embedding(nn.Module):
         if y.sum() < 0.: 
             emb = torch.zeros(1, params['m'])
             if self.cuda:
-                emb.cuda()
+                emb = emb.cuda()
         else:
             emb = self.embedding(y)
             if len(emb.shape) == 3:  # only for training stage
                 emb_shifted = torch.zeros([emb.shape[0], emb.shape[1], params['m']], dtype=torch.float32)
                 if self.cuda:
-                    emb_shifted.cuda()
+                    emb_shifted = emb_shifted.cuda()
                 emb_shifted[1:] = emb[:-1]
                 emb = emb_shifted
         return emb
