@@ -156,8 +156,8 @@ def gen_sample(model, x, params, gpu_flag, k=1, maxlen=30):
     ctx0 = ctx0.cpu().numpy()
 
     if gpu_flag:
-        next_w.cuda()
-        next_alpha_past.cuda()
+        next_w = next_w.cuda()
+        next_alpha_past = next_alpha_past.cuda()
 
     for ii in range(maxlen):
         ctx = np.tile(ctx0, [live_k, 1, 1, 1])
