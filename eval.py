@@ -15,7 +15,7 @@ import pandas as pd
 
 def textline_evaluation(
         pairs,
-        print_incorrect=False, 
+        print_incorrect=True, 
         no_spaces_in_eval=True, 
         norm_edit_distance=False, 
         uncased=False
